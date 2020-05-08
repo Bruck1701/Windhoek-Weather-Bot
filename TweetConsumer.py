@@ -2,8 +2,6 @@ import config
 import tweepy
 import datetime
 
-
-
 API_PUBLIC = config.API_KEY
 API_SECRET = config.API_SECRET_KEY
 ACCESS_TOKEN = config.ACCESS_TOKEN
@@ -25,7 +23,7 @@ def publictweet():
     if datetime.date.today().weekday() == 3:
         tweettopublish = 'Thursday. I cannot wait for the Weekend'
     if datetime.date.today().weekday() == 4:
-        tweettopublish = 'Friday...Finally'
+        tweettopublish = 'Friday...Finally!!'
     if datetime.date.today().weekday() == 5:
         tweettopublish = 'Great it is Saturday #weekend #Saturday'
     if datetime.date.today().weekday() == 6:

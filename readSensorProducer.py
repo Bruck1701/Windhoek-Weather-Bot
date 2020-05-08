@@ -8,23 +8,17 @@ import ast
 
 
 ser = serial.Serial('/dev/ttyACM0',9600, timeout = 5)
-
 # listen for the input, exit if nothing received in timeout period
 line=""
-
 dataframe_columns=['Temp','Hum','Vis','IR']
-
-#dfC = pd.DataFrame(columns=dataframe_columns,index=['date'])
 count=0
 
 while True:
 
-    #bytesToRead = ser.inWaiting()
-    #line=ser.read(bytesToRead)
     date_hour=datetime.now()
     line =ser.readline().decode("utf-8")
     if len(line)!=0:
-        #df.append()
+
         if(line[0]=='{'):
             frame_dict=ast.literal_eval(line)
             frame_dict['date']=date_hour
@@ -42,5 +36,4 @@ while True:
                 dfc=dfc.append(df)
 
 
-            #print(dfc)
             count+=1
