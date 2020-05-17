@@ -1,5 +1,5 @@
 # Windhoek-Weather-Bot
-#### Python Bot that tweets the temperature, humidity , and Information about Visible Light and Infra red captured by sensors on an Arduino Uno board. 
+#### Python Bot that tweets the temperature, humidity, and information about visible light and infrared captured by sensors on an Arduino Uno board. 
 
 <br>
 This is a project for a Python bot that gathers raw data from an Arduino Board and stores it and publishes it on Twitter (<a href=https://twitter.com/BotWindhoek> @BotWindhoek </a>)
