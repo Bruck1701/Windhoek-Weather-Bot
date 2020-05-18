@@ -5,6 +5,10 @@ import datetime
 from  SensorProducer import ArduinoSensor
 import schedule
 import time
+import requests
+import logging
+
+
 
 class WeatherBot():
 
@@ -24,7 +28,7 @@ class WeatherBot():
         '''
         job that is schedule to tweet the data
         '''
-        self.showData(self.arduino.ReadInput(),False)
+        self.showData(self.arduino.ReadInput(),True)
 
     def job2(self):
         '''
@@ -32,27 +36,55 @@ class WeatherBot():
         '''
         pass
 
+    def getJoke(self):
+        '''
+        Fetches a random joke to insert in the Tweet if the information about the weather and the joke is less than 280 chars.
+        '''
+
+        url = config.JOKE_API_URL
+        response = requests.get(url)
+
+        print(response.json())
+        if response.json()["type"]=="twopart":
+            return response.json()["setup"]+"\n"+response.json()["delivery"]
+        elif response.json()["type"]=="single":
+            return  response.json()["joke"]
+        else:
+            return ""
+
+
+
 
     def showData(self,data,postTweet=False):
         '''
         Prints and tweets the collected data from the adaFruit Sensors.
         '''
-        degree_sign= u'\N{DEGREE SIGN}'
-        info=f"[Namibia/Windhoek]: {datetime.datetime.now()}\n\tCurrent Temperature: {data['Temp']}{degree_sign}, Humidity: {data['Hum']}%\n \
-        Captured IR: {data['IR']}, Visible Light: {data['Vis']}"
-        #info = " [Namibia/Windhoek]: {}".format(datetime.datetime.now())
+        logging.basicConfig(filename='wwbot.log', level=logging.ERROR)
 
-        if postTweet:
-            self.api.update_status(info)
-        print(info)
+        degree_sign= u'\N{DEGREE SIGN}'
+        info=f"[Namibia/Windhoek]: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\tCurrent Temperature: {data['Temp']}{degree_sign}, Humidity: {data['Hum']}%\n \
+        Captured IR: {data['IR']}, Visible Light: {data['Vis']}"
+
+        try:
+            joke = self.getJoke()
+            if len(info)+2+len(joke)<280:
+                info +="\n\n"+joke
+        except Exception:
+            logging.exception("message")
+
+        finally:
+
+            if postTweet:
+                self.api.update_status(info)
+            print(info)
 
 
 
 if __name__ == "__main__":
 
+    #job1()
     bot = WeatherBot()
-
-    schedule.every(3).minutes.do(bot.job1)
+    schedule.every(6).hours.do(bot.job1)
 
 
     while 1:
