@@ -42,14 +42,15 @@ class WeatherBot():
         '''
 
         url = config.JOKE_API_URL
+
         response = requests.get(url)
 
-        print(response.json())
+        #print(response.json())
         if response.json()["type"]=="twopart":
             return response.json()["setup"]+"\n"+response.json()["delivery"]
         elif response.json()["type"]=="single":
             return  response.json()["joke"]
-        else:
+
             return ""
 
 
@@ -62,14 +63,15 @@ class WeatherBot():
         logging.basicConfig(filename='wwbot.log', level=logging.ERROR)
 
         degree_sign= u'\N{DEGREE SIGN}'
-        info=f"[Namibia/Windhoek]: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\tCurrent Temperature: {data['Temp']}{degree_sign}, Humidity: {data['Hum']}%\n \
-        Captured IR: {data['IR']}, Visible Light: {data['Vis']}"
+        info=f"[Namibia/Windhoek]: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\tCurrent Temperature: {data['Temp']}{degree_sign}, Humidity: {data['Hum']}%\nCaptured IR: {data['IR']}, Visible Light: {data['Vis']}"
 
         try:
             joke = self.getJoke()
             if len(info)+2+len(joke)<280:
                 info +="\n\n"+joke
         except Exception:
+            logging.exception("message")
+        except OSError as e:
             logging.exception("message")
 
         finally:
@@ -84,6 +86,8 @@ if __name__ == "__main__":
 
     #job1()
     bot = WeatherBot()
+    bot.job1()
+
     schedule.every(6).hours.do(bot.job1)
 
 
