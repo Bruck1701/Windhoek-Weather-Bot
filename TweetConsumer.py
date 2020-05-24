@@ -7,10 +7,11 @@ import schedule
 import time
 import requests
 import logging
+import threading
 
 
 
-class WeatherBot():
+class WeatherBot:
 
     API_PUBLIC = config.API_KEY
     API_SECRET = config.API_SECRET_KEY
@@ -28,7 +29,7 @@ class WeatherBot():
         '''
         job that is schedule to tweet the data
         '''
-        self.showData(self.arduino.ReadInput(),True)
+        self.showData(self.arduino.ReadInput(),False)
 
     def job2(self):
         '''
@@ -78,19 +79,25 @@ class WeatherBot():
 
             if postTweet:
                 self.api.update_status(info)
-            print(info)
+            else:
+                print(info)
+
+
+
+    def thread_post_information(self):
+
+        schedule.every(6).hours.do(self.job1)
+
+
+        while 1:
+            schedule.run_pending()
+            time.sleep(2)
 
 
 
 if __name__ == "__main__":
-
-    #job1()
     bot = WeatherBot()
     bot.job1()
 
-    schedule.every(6).hours.do(bot.job1)
-
-
-    while 1:
-        schedule.run_pending()
-        time.sleep(1)
+    x = threading.Thread(target=bot.thread_post_information)
+    x.start()
