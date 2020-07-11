@@ -29,7 +29,7 @@ class WeatherBot:
         '''
         job that is schedule to tweet the data
         '''
-        self.showData(self.arduino.ReadInput(),False)
+        self.showData(self.arduino.ReadInput(),True)
 
     def job2(self):
         '''
@@ -47,12 +47,13 @@ class WeatherBot:
         response = requests.get(url)
 
         #print(response.json())
-        if response.json()["type"]=="twopart":
-            return response.json()["setup"]+"\n"+response.json()["delivery"]
-        elif response.json()["type"]=="single":
-            return  response.json()["joke"]
+        if "type" in response.json():
+            if response.json()["type"]=="twopart":
+                return response.json()["setup"]+"\n"+response.json()["delivery"]
+            elif response.json()["type"]=="single":
+                return  response.json()["joke"]
 
-            return ""
+        return ""
 
 
 
