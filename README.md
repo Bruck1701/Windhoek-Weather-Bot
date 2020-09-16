@@ -1,15 +1,12 @@
 # Windhoek-Weather-Bot
-#### Python Bot that tweets the temperature, humidity, and information about visible light and infrared captured by sensors on an Arduino Uno board. 
 
-<br>
-This is a project for a Python bot that gathers raw data from an Arduino Board and stores it and publishes it on Twitter (<a href=https://twitter.com/BotWindhoek> @BotWindhoek </a>)
+This is a project for a Python bot that fetches raw data from an Arduino Board and stores the data and publishes it on Twitter (<a href=https://twitter.com/BotWindhoek> @BotWindhoek </a>)
 <br>
 
-The data to be stored will be put initially on a CSV file. The file is to be used to train a temperature prediction model based on LSTM so the bot will make his predictions based on the trained model (to be done).
+In this new version, the bot fetches the data from the board and publishes it into an AWS SNS Topic. The topic, then,  triggers two lambda functions: 
+* A Lambda function that tweets the sensor data and also Open Weather API data.
+* Another lambda function that stores the sensor data into a DynamoDB table. 
+![architecture](https://user-images.githubusercontent.com/17711277/93358773-2e81a600-f842-11ea-86c7-ac50a51f1625.jpg)
 
-The Twitter API is being used to publish the captured data. In order to break the monotony of the sensors' raw data, jokes, random quotes and other info or pictures are to be randomly selected to be included on the tweets.
-
-The Twitter interface will also be used to control the bot remotely (to be done)
-
-
+The next stage is to add another bot that fetches the DynamoDB data and predicts the next reading from the sensor using LSTM model.
 
