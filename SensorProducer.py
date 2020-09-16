@@ -9,11 +9,10 @@ import ast
 class ArduinoSensor:
     def __init__(self):
 
-        self.ser = serial.Serial('/dev/ttyACM1',9600, timeout = 5)
+        self.ser = serial.Serial('/dev/ttyACM0',9600, timeout = 5)
     # listen for the input, exit if nothing received in timeout period
 
     def ReadInput(self):
-
 
         line=""
         dataframe_columns=['Temp','Hum','Vis','IR']
