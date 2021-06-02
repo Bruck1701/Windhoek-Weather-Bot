@@ -16,4 +16,4 @@ s3transfer==0.3.3
 schedule==0.6.0
 six==1.14.0
 tweepy==3.8.0
-urllib3==1.25.9
+urllib3==1.26.5
